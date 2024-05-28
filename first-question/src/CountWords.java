@@ -1,20 +1,21 @@
 import java.util.List;
 
 public class CountWords extends Thread {
-  private int id;
   private List<String> phrases;
+  private Recurrency recurrency;
 
-  public CountWords(List<String> phrases, int id) {
+  public CountWords(List<String> phrases, Recurrency recurrency) {
     this.phrases = phrases;
-    this.id = id;
+    this.recurrency = recurrency;
   }
 
   public void run() {
     try {
       for (int i = 0; i < phrases.size(); i++) {
-        int count = phrases.get(i).split("\\s").length;
-        System.out.println("Thread " + id + " " + count);
-        Thread.sleep(1000);
+        for (String word : phrases.get(i).split("\\s")) {
+          recurrency.addWord(word);
+        }
+        // Thread.sleep(1000);
       }
     } catch (Exception e) {
       e.printStackTrace();
