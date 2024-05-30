@@ -1,6 +1,7 @@
 package third;
 
-import java.util.ArrayList;;
+import java.util.ArrayList;
+import java.util.Random;;
 
 public class Table {
     // O filosófo com ID = 0 irá pegar os garfos das casas 0 e 1
@@ -11,35 +12,50 @@ public class Table {
 
     // Matematicamente, as casas dos garfos podems er calculadas com:
     // para a esquerda -> id_garfo_esquerda = id_filósofo
-    // para a diretia -> id_garfo_direita = id_filósofo + 1 SE ID_FILOSOFO = 4: id_garfo = 0
+    // para a diretia -> id_garfo_direita = id_filósofo + 1 SE ID_FILOSOFO = 4: id_garfo_direita = 0
 
     ArrayList<Integer> garfos = new ArrayList<Integer>();
 
     // 1 -> GARFO LIVRE
-    // 2 -> GARFO OCUPADO
+    // 0 -> GARFO OCUPADO
 
     int GARFO_LIMITE = 5;
     int FILOSOFO_LIMITE = 5;
     int id_garfo_esquerda;
     int id_garfo_direita;
 
-    public void pegarGarfo(int id_filosofo) {
+    public Table() {
+        for ( int i = 0; i < 5; i++ ) {
+            garfos.add(1);
+        }
+    }
+
+    public void comer(int id_filosofo) {
         System.out.println(">> Filósofo " + id_filosofo + " quer comer");
         try {
             synchronized(garfos) {
-                if (id_filosofo == (FILOSOFO_LIMITE - 1)) {
-                    id_garfo_esquerda = id_filosofo;
-                    id_garfo_direita = 0;
-                } else {
-                    id_garfo_esquerda = id_filosofo;
-                    id_garfo_direita = id_filosofo + 1;
-                }
+                id_garfo_esquerda = id_filosofo;
+                id_garfo_direita = (id_filosofo + 1) % FILOSOFO_LIMITE;
+                System.out.println(">> Filósofo " + id_filosofo + "está pégando os garfos: " + id_garfo_esquerda + " " + id_garfo_direita + " com valores: " + garfos.get(id_garfo_direita) + " " + garfos.get(id_garfo_esquerda));
                 if (garfos.get(id_garfo_esquerda) == 1 && garfos.get(id_garfo_direita) == 1) {
-                    System.out.println(">> Filósofo " + id_filosofo + " está comendo");
-                } else {
-                    garfos.wait();
+                    System.out.println("\n\n>> Filósofo " + id_filosofo + " [ESTÁ COMENDO]\n\n");
+                    garfos.set(id_garfo_esquerda, 0);
+                    garfos.set(id_garfo_direita, 0);
+                    Thread.sleep(new Random().nextInt(3000));
+                    garfos.set(id_garfo_esquerda, 1);
+                    garfos.set(id_garfo_direita, 1);
+                    System.out.println(">> Filósofo " + id_filosofo + " soltou os garfos");
+                    // garfos.get(id_garfo_direita).notify();
+                    // garfos.get(id_garfo_esquerda).notify();
                 }
             }
+        } catch (Exception e) {}
+    }
+
+    public void pensar(int id_filosofo) {
+        try {
+            System.out.println(">> FIlósofo " + id_filosofo + " está pensando");
+            Thread.sleep(new Random().nextInt(3000));
         } catch (Exception e) {}
     }
 }

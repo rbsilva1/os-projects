@@ -1,7 +1,13 @@
 package third;
 
 public class Main {
-    int QUANTIDADE = 5;
-    int GARFOS = 5;
-    boolean FAMINTO;
+    
+    public static void main(String[] args) {
+        
+        Table mesa = new Table();
+
+        for( int i = 0; i < 5; i ++ ) {
+            new Philosofer(i, mesa).start();
+        }
+    }
 }
