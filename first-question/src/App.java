@@ -10,7 +10,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         List<String> phrases = new ArrayList<>();
         long startTime = System.currentTimeMillis();
-        File file = new File("src/filename.txt");
+        File file = new File("first-question/src/filename.txt");
         Recurrency recurrency = new Recurrency();
         Scanner reader = new Scanner(file);
 
